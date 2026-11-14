@@ -33,3 +33,4 @@
 npm ci           # установка зависимостей (node 20+)
 npm run lint     # markdownlint-cli2 по всем .md
 npm run build    # сборка портала в build/ (+ llms.txt, llms-full.txt)
+```
