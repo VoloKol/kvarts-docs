@@ -1,0 +1,9 @@
+extends: existence
+message: 'Текст ссылки должен быть осмысленным: «%s» не описывает назначение ссылки.'
+level: warning
+ignorecase: true
+tokens:
+  - здесь
+  - тут
+  - по ссылке
+  - по этой ссылке

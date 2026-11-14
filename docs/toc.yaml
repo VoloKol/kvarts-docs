@@ -1,0 +1,5 @@
+title: Кварц — документация
+href: index.md
+items:
+  - name: Стайлгайд базы знаний для RAG-системы
+    href: style-guide-rag.md

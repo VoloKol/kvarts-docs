@@ -1,0 +1,26 @@
+{
+  "name": "kvarts-docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "build": "yfm build -i docs -o build --llms"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VoloKol/kvarts-docs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/VoloKol/kvarts-docs/issues"
+  },
+  "homepage": "https://github.com/VoloKol/kvarts-docs#readme",
+  "devDependencies": {
+    "@diplodoc/cli": "^5.70.2",
+    "markdownlint-cli2": "^0.24.1"
+  }
+}
