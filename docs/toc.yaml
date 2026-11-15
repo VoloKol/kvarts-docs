@@ -1,5 +1,7 @@
 title: Кварц — документация
 href: index.md
 items:
+  - name: "Быстрый старт: первый график телеметрии"
+    href: quickstart.md
   - name: Стайлгайд базы знаний для RAG-системы
     href: style-guide-rag.md
