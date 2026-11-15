@@ -36,7 +36,7 @@ jobs:
           curl -sL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" | tar xz -C vale-bin
           ./vale-bin/vale --version
       - name: Проверка Vale
-        run: vale --config .vale.ini .
+        run: ./vale-bin/vale --config .vale.ini .
 
   build:
     name: Сборка Diplodoc
