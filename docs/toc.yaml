@@ -3,5 +3,7 @@ href: index.md
 items:
   - name: "Быстрый старт: первый график телеметрии"
     href: quickstart.md
+  - name: Как подключить шлюз Кварц-T1
+    href: connect-gateway-t1.md
   - name: Стайлгайд базы знаний для RAG-системы
     href: style-guide-rag.md
