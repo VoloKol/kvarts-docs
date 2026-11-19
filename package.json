@@ -1,11 +1,11 @@
 {
   "name": "kvarts-docs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Демонстрационная документация платформы «Кварц» (портфолио технического писателя): Diplodoc + GitHub Pages",
   "main": "index.js",
   "scripts": {
     "lint": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
-    "build": "yfm build -i docs -o build --llms"
+    "build": "yfm build -i docs -o build --llms --strict"
   },
   "repository": {
     "type": "git",

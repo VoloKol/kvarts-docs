@@ -1,0 +1,203 @@
+openapi: 3.1.0
+info:
+  title: Кварц API
+  version: 1.0.0
+  description: |
+    REST API платформы «Кварц»: устройства, телеметрия и API-ключи.
+
+    Авторизация — заголовок `X-Kvartz-Key` с API-ключом. Срок жизни ключа — 90 дней.
+
+    Лимит запросов зависит от тарифа: базовый — 100 RPS, профессиональный — 1000 RPS.
+servers:
+  - url: https://api.kvartz.example/v1
+security:
+  - ApiKeyAuth: []
+paths:
+  /devices:
+    get:
+      summary: Список устройств
+      description: Возвращает шлюзы, привязанные к API-ключу.
+      responses:
+        '200':
+          description: Массив устройств.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /devices/{device_id}/telemetry/latest:
+    get:
+      summary: Последняя точка телеметрии
+      description: Возвращает последнюю полученную точку телеметрии шлюза.
+      parameters:
+        - $ref: '#/components/parameters/DeviceId'
+      responses:
+        '200':
+          description: Точка телеметрии.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemetryPoint'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /devices/{device_id}/telemetry:
+    get:
+      summary: Телеметрия за период
+      description: Возвращает точки телеметрии шлюза за указанный период. Период — не более 30 дней.
+      parameters:
+        - $ref: '#/components/parameters/DeviceId'
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Начало периода.
+          example: '2026-11-14T00:00:00Z'
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: Конец периода.
+          example: '2026-11-15T00:00:00Z'
+        - name: metric
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - temperature
+              - humidity
+              - voltage
+          description: Одна метрика вместо полного набора.
+      responses:
+        '200':
+          description: Массив точек телеметрии.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TelemetryPoint'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /keys:
+    get:
+      summary: Список API-ключей
+      description: Возвращает ключи аккаунта со статусами. Значение ключа не возвращается — оно показывается один раз при создании.
+      responses:
+        '200':
+          description: Массив ключей.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Kvartz-Key
+  parameters:
+    DeviceId:
+      name: device_id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^kvt-\d{4}-[a-z0-9]{4}$'
+      description: Идентификатор шлюза.
+      example: kvt-0017-a3f2
+  schemas:
+    Device:
+      type: object
+      properties:
+        device_id:
+          type: string
+          description: Идентификатор шлюза.
+          example: kvt-0017-a3f2
+        name:
+          type: string
+          description: Название шлюза в веб-консоли.
+          example: Шлюз цеха №2
+        status:
+          type: string
+          description: Состояние шлюза.
+          enum:
+            - online
+            - offline
+    Metrics:
+      type: object
+      properties:
+        temperature:
+          type: number
+          description: Температура, °C.
+          example: 23.4
+        humidity:
+          type: number
+          description: Влажность, %.
+          example: 41.0
+        voltage:
+          type: number
+          description: Напряжение питания, В.
+          example: 12.1
+    TelemetryPoint:
+      type: object
+      properties:
+        device_id:
+          type: string
+          description: Идентификатор шлюза.
+          example: kvt-0017-a3f2
+        metrics:
+          $ref: '#/components/schemas/Metrics'
+        timestamp:
+          type: string
+          format: date-time
+          description: Отметка времени точки.
+          example: '2026-11-15T09:00:00Z'
+    ApiKey:
+      type: object
+      properties:
+        key_id:
+          type: string
+          description: Идентификатор ключа.
+          example: key-8f21
+        name:
+          type: string
+          description: Название ключа.
+          example: first-graph
+        scope:
+          type: string
+          description: Область ключа.
+          example: telemetry:read
+        status:
+          type: string
+          description: Статус ключа.
+          enum:
+            - Активен
+            - Отозван
+        expires_at:
+          type: string
+          format: date-time
+          description: Срок действия — 90 дней с момента выпуска.
+          example: '2027-02-13T00:00:00Z'
+  responses:
+    Unauthorized:
+      description: Ключ не передан, отозван или истёк его срок (90 дней). Выпустите новый ключ в разделе «Ключи».
+    Forbidden:
+      description: Ключ активен, но его область не покрывает действие. Проверьте область ключа в разделе «Ключи».

@@ -1,4 +1,4 @@
-title: Кварц — документация
+﻿title: Кварц — документация
 href: index.md
 items:
   - name: "Быстрый старт: первый график телеметрии"
@@ -9,5 +9,12 @@ items:
     href: architecture.md
   - name: Модель безопасности платформы «Кварц»
     href: security-model.md
+  - name: Справочник Кварц API
+    include:
+      path: api
+      mode: link
+      includers:
+        - name: openapi
+          input: api/kvartz-api.yaml
   - name: Стайлгайд базы знаний для RAG-системы
     href: style-guide-rag.md
