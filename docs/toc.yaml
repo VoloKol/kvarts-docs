@@ -5,5 +5,7 @@ items:
     href: quickstart.md
   - name: Как подключить шлюз Кварц-T1
     href: connect-gateway-t1.md
+  - name: Архитектура платформы «Кварц»
+    href: architecture.md
   - name: Стайлгайд базы знаний для RAG-системы
     href: style-guide-rag.md
